@@ -1,6 +1,9 @@
 use clap::Parser;
 use clap::Subcommand;
 
+use crate::portfolio::Porfolio;
+mod portfolio;
+
 #[derive(Parser, Debug)]
 #[command(name = "invest_folio")]
 struct Cli {
@@ -14,16 +17,16 @@ enum Commands {
     Open { name: String },
 }
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     match cli.command {
-        Commands::Create { name } => create(name),
+        Commands::Create { name } => {
+            Porfolio::new(None, name).await?;
+            Ok(())
+        }
         Commands::Open { name } => open(name),
     }
-}
-fn create(name: String) -> anyhow::Result<()> {
-    println!("Creating portfolio: {}", name);
-    Ok(())
 }
 fn open(name: String) -> anyhow::Result<()> {
     println!("Searching for portfolio: {}", name);
