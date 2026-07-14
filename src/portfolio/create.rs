@@ -86,4 +86,12 @@ mod test {
         let result = create_db(&path).await.unwrap();
         assert_eq!(result, correct);
     }
+    #[tokio::test]
+    async fn create_database_failure() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("testing.db");
+        std::fs::File::create(&path).unwrap();
+        let result = create_db(&path).await.unwrap_err();
+        assert!(matches!(result, CreateDatabaseError::DatabaseExists))
+    }
 }

@@ -14,6 +14,7 @@ impl Porfolio {
 
         let path = new_db_path(path, &name)?;
         let db_url = create_db(&path).await?;
+        //let conn = connect_to_db(&db_url)?;
 
         Ok(Self { name, db_url })
     }
